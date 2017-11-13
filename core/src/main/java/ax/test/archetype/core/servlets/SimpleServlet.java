@@ -29,6 +29,8 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Servlet that writes some sample content into the response. It is mounted for
  * all resources of a specific Sling resource type. The
@@ -46,10 +48,16 @@ public class SimpleServlet extends SlingSafeMethodsServlet {
 
     private static final long serialVersionUid = 1L;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
     @Override
     protected void doGet(final SlingHttpServletRequest req,
             final SlingHttpServletResponse resp) throws ServletException, IOException {
         final Resource resource = req.getResource();
+        
+        logger.debug("SimpleServlet received GET for resource name:'{}' path:'{}'", 
+                resource.getName(), resource.getPath());
+        
         resp.setContentType("text/plain");
         resp.getWriter().write("Title = " + resource.adaptTo(ValueMap.class).get("jcr:title"));
     }
